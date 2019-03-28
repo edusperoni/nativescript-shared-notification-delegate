@@ -6,7 +6,6 @@
     "typings": "index.d.ts",
     "nativescript": {
         "platforms": {
-            "android": "5.2.0",
             "ios": "5.2.0"
         }
     },
@@ -34,12 +33,11 @@
     "keywords": [
         "NativeScript",
         "JavaScript",
-        "Android",
         "iOS"
     ],
     "author": {
-        "name": "Your Name",
-        "email": "youremail@yourdomain.com"
+        "name": "Eduardo Speroni",
+        "email": "edusperoni@gmail.com"
     },
     "bugs": {
         "url": "https://github.com/edusperoni/nativescript-shared-notification-delegate/issues"
