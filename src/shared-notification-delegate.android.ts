@@ -1,5 +1,5 @@
-import { Common } from './shared-notification-delegate.common';
+import { SharedNotificationDelegateCommon } from './shared-notification-delegate.common';
 
-export class SharedNotificationDelegate extends Common {
+export class SharedNotificationDelegate extends SharedNotificationDelegateCommon {
 
 }

@@ -1,4 +1,4 @@
-import { Common } from './shared-notification-delegate.common';
+import { SharedNotificationDelegateCommon } from './shared-notification-delegate.common';
 
 type DeferedPromise<T> = {
     promise: Promise<T>;
@@ -38,7 +38,7 @@ export interface DelegateObserver {
     userNotificationCenterOpenSettingsForNotification?(center: UNUserNotificationCenter, notification: UNNotification, stop: () => void, next: () => void): void;
     userNotificationCenterWillPresentNotificationWithCompletionHandler?(center: UNUserNotificationCenter, notification: UNNotification, completionHandler: (p1: UNNotificationPresentationOptions) => void, stop: () => void, next: () => void): void;
 }
-export class SharedNotificationDelegateImpl extends Common {
+export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCommon {
     _observers: Array<{ observer: DelegateObserver, priority: number }> = [];
     private delegate: UNUserNotificationCenterDelegateImpl;
 
