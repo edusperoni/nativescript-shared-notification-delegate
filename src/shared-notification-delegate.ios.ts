@@ -92,7 +92,7 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
         const owner = this._owner.get();
         if (owner) {
             owner._observers.forEach(({observer}) => {
-                if (observer.userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler) {
+                if (observer.userNotificationCenterWillPresentNotificationWithCompletionHandler) {
                     promise = promise.then((skip: boolean) => {
                         if (skip) { return true; }
                         const defPromise = createStopNextPromise();
@@ -117,7 +117,7 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
         const owner = this._owner.get();
         if (owner) {
             owner._observers.forEach(({observer}) => {
-                if (observer.userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler) {
+                if (observer.userNotificationCenterOpenSettingsForNotification) {
                     promise = promise.then((skip: boolean) => {
                         if (skip) { return true; }
                         const defPromise = createStopNextPromise();
