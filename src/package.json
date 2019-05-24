@@ -1,7 +1,7 @@
 {
     "name": "nativescript-shared-notification-delegate",
     "version": "1.0.0",
-    "description": "Your awesome NativeScript plugin.",
+    "description": "Shared delegate helper for iOS.",
     "main": "shared-notification-delegate",
     "typings": "index.d.ts",
     "nativescript": {
@@ -33,6 +33,7 @@
     "keywords": [
         "NativeScript",
         "JavaScript",
+        "TypeScript",
         "iOS"
     ],
     "author": {
