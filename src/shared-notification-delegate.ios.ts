@@ -34,9 +34,9 @@ function createStopNextPromise(): StopNextPromise {
 }
 
 export interface DelegateObserver {
-    userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler?(center: UNUserNotificationCenter, response: UNNotificationResponse, completionHandler: () => void, stop: () => void, next: () => void): void;
+    userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler?(center: UNUserNotificationCenter, response: UNNotificationResponse, completionHandler: () => void, next: () => void): void;
     userNotificationCenterOpenSettingsForNotification?(center: UNUserNotificationCenter, notification: UNNotification, stop: () => void, next: () => void): void;
-    userNotificationCenterWillPresentNotificationWithCompletionHandler?(center: UNUserNotificationCenter, notification: UNNotification, completionHandler: (p1: UNNotificationPresentationOptions) => void, stop: () => void, next: () => void): void;
+    userNotificationCenterWillPresentNotificationWithCompletionHandler?(center: UNUserNotificationCenter, notification: UNNotification, completionHandler: (p1: UNNotificationPresentationOptions) => void, next: () => void): void;
 }
 export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCommon {
     _observers: Array<{ observer: DelegateObserver, priority: number }> = [];
@@ -61,7 +61,7 @@ export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCo
 
     addObserver(observer: DelegateObserver, priority: number = 100) {
         this._observers.push({ observer, priority });
-        this._observers.sort((a , b) => a.priority > b.priority ? 1 : (a.priority < b.priority ? -1 : 0));
+        this._observers.sort((a, b) => a.priority > b.priority ? 1 : (a.priority < b.priority ? -1 : 0));
     }
 
     removeObserver(observer: DelegateObserver) {
@@ -91,7 +91,7 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
         let promise = Promise.resolve(false);
         const owner = this._owner.get();
         if (owner) {
-            owner._observers.forEach(({observer}) => {
+            owner._observers.forEach(({ observer }) => {
                 if (observer.userNotificationCenterWillPresentNotificationWithCompletionHandler) {
                     promise = promise.then((skip: boolean) => {
                         if (skip) { return true; }
@@ -101,13 +101,19 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
                             completionHandler(p1);
                         };
                         try {
-                            observer.userNotificationCenterWillPresentNotificationWithCompletionHandler(center, notification, childHandler, defPromise.stop, defPromise.next);
+                            observer.userNotificationCenterWillPresentNotificationWithCompletionHandler(center, notification, childHandler, defPromise.next);
                         } catch (ignore) {
                             defPromise.next();
                         }
                         return defPromise.promise;
                     });
                 }
+            });
+            promise.then((handled: boolean) => {
+                if (!handled) {
+                    completionHandler(0);
+                }
+                return true;
             });
         }
     }
@@ -116,7 +122,7 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
         let promise = Promise.resolve(false);
         const owner = this._owner.get();
         if (owner) {
-            owner._observers.forEach(({observer}) => {
+            owner._observers.forEach(({ observer }) => {
                 if (observer.userNotificationCenterOpenSettingsForNotification) {
                     promise = promise.then((skip: boolean) => {
                         if (skip) { return true; }
@@ -137,7 +143,7 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
         let promise = Promise.resolve(false);
         const owner = this._owner.get();
         if (owner) {
-            owner._observers.forEach(({observer}) => {
+            owner._observers.forEach(({ observer }) => {
                 if (observer.userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler) {
                     promise = promise.then((skip: boolean) => {
                         if (skip) { return true; }
@@ -147,13 +153,19 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
                             completionHandler();
                         };
                         try {
-                            observer.userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler(center, response, childHandler, defPromise.stop, defPromise.next);
+                            observer.userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler(center, response, childHandler, defPromise.next);
                         } catch (ignore) {
                             defPromise.next();
                         }
                         return defPromise.promise;
                     });
                 }
+            });
+            promise.then((handled: boolean) => {
+                if (!handled) {
+                    completionHandler();
+                }
+                return true;
             });
         }
     }

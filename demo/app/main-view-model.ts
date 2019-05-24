@@ -38,7 +38,7 @@ export class HelloWorldModel extends Observable {
 
   addObservers() {
     SharedNotificationDelegate.addObserver({
-      userNotificationCenterWillPresentNotificationWithCompletionHandler: (ncenter, notification, handler, stop, next) => {
+      userNotificationCenterWillPresentNotificationWithCompletionHandler: (ncenter, notification, handler, next) => {
         // console.log(ncenter, notification);
         console.log("notification received by observer 1");
         this.setMessageMainLoop(`notification received\n${notification.request.content.title}\n${notification.request.content.body}`);
@@ -46,7 +46,7 @@ export class HelloWorldModel extends Observable {
       }
     });
     SharedNotificationDelegate.addObserver({
-      userNotificationCenterWillPresentNotificationWithCompletionHandler: (ncenter, notification, handler, stop, next) => {
+      userNotificationCenterWillPresentNotificationWithCompletionHandler: (ncenter, notification, handler, next) => {
         // console.log(ncenter, notification);
         console.log("notification received by observer 2 with priority 1");
         this.setMessageMainLoop(`notification received\n${notification.request.content.title}\n${notification.request.content.body}`);
