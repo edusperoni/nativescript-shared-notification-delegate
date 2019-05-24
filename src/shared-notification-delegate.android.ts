@@ -1,5 +1,7 @@
 import { SharedNotificationDelegateCommon } from './shared-notification-delegate.common';
 
-export class SharedNotificationDelegate extends SharedNotificationDelegateCommon {
+export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCommon {
 
 }
+
+export const SharedNotificationDelegate = new SharedNotificationDelegateImpl();
