@@ -37,6 +37,10 @@ export interface DelegateObserver {
     userNotificationCenterDidReceiveNotificationResponseWithCompletionHandler?(center: UNUserNotificationCenter, response: UNNotificationResponse, completionHandler: () => void, next: () => void): void;
     userNotificationCenterOpenSettingsForNotification?(center: UNUserNotificationCenter, notification: UNNotification, stop: () => void, next: () => void): void;
     userNotificationCenterWillPresentNotificationWithCompletionHandler?(center: UNUserNotificationCenter, notification: UNNotification, completionHandler: (p1: UNNotificationPresentationOptions) => void, next: () => void): void;
+    /**
+     * if set to not null/undefined, will ensure only one is registered
+     */
+    observerUniqueKey?: any;
 }
 export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCommon {
     _observers: Array<{ observer: DelegateObserver, priority: number }> = [];
@@ -60,12 +64,31 @@ export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCo
     }
 
     addObserver(observer: DelegateObserver, priority: number = 100) {
+        if (observer.observerUniqueKey != null) {
+            this.removeObserverByUniqueKey(observer.observerUniqueKey);
+        }
         this._observers.push({ observer, priority });
-        this._observers.sort((a, b) => a.priority > b.priority ? 1 : (a.priority < b.priority ? -1 : 0));
+        this.sortObservers();
     }
 
     removeObserver(observer: DelegateObserver) {
         this._observers = this._observers.filter((v) => v.observer !== observer);
+    }
+
+    removeObserverByUniqueKey(key: string) {
+        if (key == null) {
+            console.log("SharedNotificationDelegate Warning: tried to remove null/undefined keys.");
+            return;
+        }
+        this._observers = this._observers.filter((v) => v.observer.observerUniqueKey !== key);
+    }
+
+    clearObservers() {
+        this._observers = [];
+    }
+
+    private sortObservers() {
+        this._observers.sort((a, b) => a.priority > b.priority ? 1 : (a.priority < b.priority ? -1 : 0));
     }
 }
 
