@@ -52,7 +52,7 @@
         "typescript": "~3.3.3",
         "prompt": "^1.0.0",
         "rimraf": "^2.6.3",
-        "tslint": "^5.12.1",
+        "tslint": "^5.17.0",
         "semver": "^5.6.0"
     },
     "dependencies": {},
