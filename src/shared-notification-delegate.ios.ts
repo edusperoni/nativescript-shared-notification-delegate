@@ -44,6 +44,7 @@ export interface DelegateObserver {
 }
 export class SharedNotificationDelegateImpl extends SharedNotificationDelegateCommon {
     _observers: Array<{ observer: DelegateObserver, priority: number }> = [];
+    disableUnhandledWarning = false;
     private delegate: UNUserNotificationCenterDelegateImpl;
 
     constructor() {
@@ -186,6 +187,9 @@ class UNUserNotificationCenterDelegateImpl extends NSObject implements UNUserNot
             });
             promise.then((handled: boolean) => {
                 if (!handled) {
+                    if (!owner.disableUnhandledWarning) {
+                        console.log("WARNING[shared-notification-delegate]: Notification was received but was not handled by any observer");
+                    }
                     completionHandler();
                 }
                 return true;

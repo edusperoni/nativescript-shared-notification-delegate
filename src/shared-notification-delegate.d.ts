@@ -10,6 +10,7 @@ export declare class SharedNotificationDelegateImpl extends SharedNotificationDe
         observer: DelegateObserver;
         priority: number;
     }>;
+    disableUnhandledWarning: boolean;
     private delegate;
     constructor();
     static isUNUserNotificationCenterAvailable(): boolean;
