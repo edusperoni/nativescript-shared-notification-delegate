@@ -1,6 +1,6 @@
 {
     "name": "nativescript-shared-notification-delegate",
-    "version": "0.0.2",
+    "version": "1.0.0",
     "description": "Shared delegate helper for iOS.",
     "main": "shared-notification-delegate",
     "typings": "index.d.ts",
